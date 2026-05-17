@@ -1,0 +1,44 @@
+{
+  "categories": {
+    "data_exfiltration": 20,
+    "jailbreak": 15
+  },
+  "rules": [
+    {
+      "pattern": "ignore (all )?(previous|instructions|rules|guidelines)",
+      "category": "jailbreak",
+      "weight": 35,
+      "action": "remove"
+    },
+    {
+      "pattern": "jailbreak|dev mode|developer mode",
+      "category": "jailbreak",
+      "weight": 50,
+      "action": "mask"
+    },
+    {
+      "pattern": "system prompt|override",
+      "category": "data_exfiltration",
+      "weight": 45,
+      "action": "mask"
+    },
+    {
+      "pattern": "pretend to be|act as if",
+      "category": "jailbreak",
+      "weight": 25,
+      "action": "remove"
+    },
+    {
+      "pattern": "unrestricted|no restrictions",
+      "category": "jailbreak",
+      "weight": 40,
+      "action": "mask"
+    },
+    {
+      "pattern": "roleplay as|new persona",
+      "category": "jailbreak",
+      "weight": 20,
+      "action": "remove"
+    }
+  ]
+}

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AegisGuard — Quantum Security AI</title>
+    <meta name="description"
+        content="AegisGuard is an intelligent security AI assistant that monitors and intercepts malicious prompts in real-time." />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;600;800&family=IBM+Plex+Mono:wght@300;400;500&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .switch input:checked+.slider {
+            background-color: var(--green) !important;
+        }
+
+        .switch input:not(:checked)+.slider {
+            background-color: #555 !important;
+        }
+
+        .switch input:checked+.slider span {
+            transform: translateX(14px);
+        }
+
+        .switch input:not(:checked)+.slider span {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ── Top Bar ─────────────────────────────────── -->
+    <div class="topbar">
+        <div class="topbar-left">
+            <div class="logo-mark">
+                <svg width="14" height="14" viewBox="0 0 12 12" fill="none">
+                    <path d="M6 1L11 4V8L6 11L1 8V4L6 1Z" stroke="#00FFC2" stroke-width="1.2" />
+                    <path d="M6 4L8.5 5.5V8.5L6 10L3.5 8.5V5.5L6 4Z" fill="#00FFC2" opacity="0.3" />
+                </svg>
+            </div>
+            <span class="brand-name">AEGISGUARD</span>
+            <span class="brand-sub">QUANTUM SECURITY AI</span>
+        </div>
+        <div class="topbar-right" style="display: flex; align-items: center; gap: 16px;">
+            <div class="toggle-container" style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 10px; color: var(--text-muted); letter-spacing: 1px;">FIREWALL</span>
+                <label class="switch" style="position: relative; display: inline-block; width: 34px; height: 20px;">
+                    <input type="checkbox" id="firewall-toggle" checked style="opacity: 0; width: 0; height: 0;">
+                    <span class="slider round"
+                        style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--green); transition: .4s; border-radius: 34px;">
+                        <span
+                            style="position: absolute; content: ''; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: #12141d; transition: .4s; border-radius: 50%;"></span>
+                    </span>
+                </label>
+            </div>
+            <div class="status-indicator">
+                <div class="status-dot" id="status-dot"></div>
+                <span id="status-text">SYSTEM ACTIVE</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Main Layout ────────────────────────────── -->
+    <div class="main">
+
+        <!-- ── Chat Panel (left) ────────────────── -->
+        <div class="chat-panel">
+
+            <div class="proto-bar">
+                <div style="display:flex;align-items:center;gap:8px">
+                    <svg width="8" height="10" viewBox="0 0 8 10" fill="var(--green)">
+                        <path d="M4 0L8 2V5C8 7.5 6 9.5 4 10C2 9.5 0 7.5 0 5V2L4 0Z" />
+                    </svg>
+                    <span style="color:var(--text-muted)">SAFETY PROTOCOL:</span>
+                    <span style="color:#C8E6E0">V4.2</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:6px">
+                    <span style="color:var(--text-muted)">NEURAL INTEGRITY:</span>
+                    <span class="integrity" id="integrity-val">99.8%</span>
+                </div>
+            </div>
+
+            <div class="messages" id="messages">
+                <!-- Welcome message -->
+                <div class="msg ai">
+                    <div class="msg-avatar">AG</div>
+                    <div class="msg-bubble">
+                        Hello! I'm <strong>AegisGuard</strong>. How can I assist your secure session today? Feel free to
+                        ask me anything — I'm monitoring all inputs in real-time. 🛡️
+                    </div>
+                </div>
+                <!-- Typing indicator -->
+                <div class="msg ai typing-indicator" id="typing-indicator">
+                    <div class="msg-avatar">AG</div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            </div>
+
+            <div class="input-area" id="input-area">
+                <input type="file" id="file-input" style="display: none;" accept=".txt,.js,.py,.json,.md,.csv" />
+                <button class="attach-btn" id="attach-btn" onclick="document.getElementById('file-input').click()"
+                    style="background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 0 10px; font-size: 18px;">📎</button>
+                <input id="chat-input" type="text" placeholder="Type a secure message…" autocomplete="off"
+                    style="flex: 1;" />
+                <button class="exec-btn" id="exec-btn" onclick="sendMessage()">EXECUTE</button>
+            </div>
+        </div>
+
+        <!-- ── Right Sidebar (Security Metrics) ──── -->
+        <div class="sidebar">
+
+            <!-- Risk Score Gauge -->
+            <div class="sidebar-section">
+                <div class="section-label">
+                    Risk Score Gauge
+                    <span id="gauge-level-tag" style="font-size:8px;color:var(--green)">SAFE</span>
+                </div>
+                <div class="gauge-container">
+                    <div class="gauge-ring">
+                        <svg viewBox="0 0 100 100">
+                            <circle class="gauge-track" cx="50" cy="50" r="48" />
+                            <circle class="gauge-fill" id="gauge-fill" cx="50" cy="50" r="48" />
+                        </svg>
+                        <div class="gauge-center">
+                            <div class="gauge-score" id="gauge-score">12</div>
+                            <div class="gauge-label" id="gauge-label">SAFE ZONE</div>
+                        </div>
+                    </div>
+                    <div class="gauge-status" id="gauge-status">● MINIMAL THREAT</div>
+                    <div class="alert-banner" id="alert-banner">⚠ THREAT INTERCEPTED</div>
+                </div>
+            </div>
+
+            <!-- Threat Log -->
+            <div class="sidebar-section">
+                <div class="section-label">Threat Logs</div>
+                <div class="threat-log" id="threat-log">
+                    <div class="log-entry">
+                        <div class="log-dot safe"></div>
+                        <span>Session started</span>
+                        <span class="log-time">--:--</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Health -->
+            <div class="sidebar-section">
+                <div class="section-label">
+                    System Health
+                    <span id="health-ping" style="color:var(--green)">68 BPM</span>
+                </div>
+                <div class="health-grid">
+                    <div class="health-item">
+                        <div class="health-item-label">FIREWALL</div>
+                        <div class="health-item-value" id="h-firewall">100%</div>
+                    </div>
+                    <div class="health-item">
+                        <div class="health-item-label">ENCRYPT</div>
+                        <div class="health-item-value" id="h-encrypt">AES-256</div>
+                    </div>
+                    <div class="health-item">
+                        <div class="health-item-label">SCAN RATE</div>
+                        <div class="health-item-value" id="h-scan">1.2ms</div>
+                    </div>
+                    <div class="health-item">
+                        <div class="health-item-label">UPTIME</div>
+                        <div class="health-item-value" id="h-uptime">99.9%</div>
+                    </div>
+                </div>
+                <div class="health-bars" id="health-bars"></div>
+                <div class="pulse-line">
+                    <canvas id="pulse-canvas"></canvas>
+                </div>
+            </div>
+
+        </div><!-- /sidebar -->
+    </div><!-- /main -->
+
+    <script src="script.js"></script>
+</body>
+
+</html>
