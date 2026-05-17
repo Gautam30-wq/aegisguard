@@ -79,6 +79,13 @@ app.post("/chat", firewallMiddleware, async (req, res) => {
   }
 });
 
-app.listen(3000, () => {
-  console.log("🚀 Server running on http://localhost:3000");
-});
+// Replace your old app.listen loop at the bottom with this:
+if (process.env.NODE_ENV !== 'production') {
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+        console.log(`Server running locally on port ${PORT}`);
+    });
+}
+
+// 👉 CRITICAL ADDITION: Export the app module so Vercel can handle the serverless runtime routing
+module.exports = app;
